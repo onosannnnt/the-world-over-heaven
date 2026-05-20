@@ -93,7 +93,7 @@
 	tabindex="-1"
 >
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
-	<div class="modal-content" onclick={(e) => e.stopPropagation()} role="document">
+	<div class="modal-content" onclick={(e) => e.stopPropagation()} role="dialog">
 		<header class="modal-header">
 			<h2>คำทำนายไพ่ยิปซี</h2>
 			<button class="btn-close" onclick={onClose}>✕</button>
