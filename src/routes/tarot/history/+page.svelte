@@ -27,13 +27,13 @@
 				<a href="/tarot" class="btn-start">เริ่มทำนายเลย</a>
 			</div>
 		{:else}
-			{#each history as item}
+			{#each history as item (item.id)}
 				<div class="history-item">
 					<div class="item-header">
 						<span class="date">{formatDate(item.timestamp)}</span>
 					</div>
 					<div class="item-cards">
-						{#each item.cards as card}
+						{#each item.cards as card (card.id)}
 							<div class="card-thumb">
 								<img src={card.imageUrl} alt={card.nameTh} class:reversed={card.isReversed} />
 								<span class="card-name dark:text-slate-400">{card.nameTh}</span>
@@ -50,7 +50,7 @@
 						<div class="item-summary dark:bg-slate-800 dark:text-slate-300">
 							<h4 class="dark:text-white">คำทำนาย:</h4>
 							<div class="summary-content">
-								{#each item.aiSummary.split('\n') as paragraph}
+								{#each item.aiSummary.split('\n') as paragraph, i (i)}
 									<p>{paragraph}</p>
 								{/each}
 							</div>

@@ -7,7 +7,7 @@
 	let { children, data } = $props();
 	let isSettingsOpen = $state(false);
 
-	const user = $derived(data.user);
+	const user = $derived(data?.user);
 </script>
 
 <svelte:head>

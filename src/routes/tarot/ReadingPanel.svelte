@@ -95,7 +95,7 @@
 		<div class="modal-body">
 			{#if activeTab === 'meanings'}
 				<div class="cards-meanings">
-					{#each selectedCards as card}
+					{#each selectedCards as card (card.id)}
 						<div class="meaning-card">
 							<div class="card-header">
 								{#if card.imageUrl}
@@ -177,7 +177,7 @@
 										</div>
 										<hr />
 									{/if}
-									{#each aiSummary.split('\n') as paragraph}
+									{#each aiSummary.split('\n') as paragraph, i (i)}
 										{#if paragraph.startsWith('##')}
 											<h3>{paragraph.replace(/#/g, '').trim()}</h3>
 										{:else if paragraph.startsWith('**') && paragraph.endsWith('**')}

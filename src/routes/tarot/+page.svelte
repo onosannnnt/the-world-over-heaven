@@ -133,7 +133,7 @@
 						class:list-view={!showImages}
 						style="gap: {settings.cardSpacing}rem"
 					>
-						{#each groupedCards.major as card}
+						{#each groupedCards.major as card (card.id)}
 							<button
 								class="card"
 								class:selected={selectedCards.some((c) => c.id === card.id)}
@@ -172,7 +172,7 @@
 						class:list-view={!showImages}
 						style="gap: {settings.cardSpacing}rem"
 					>
-						{#each groupedCards.minor as card}
+						{#each groupedCards.minor as card (card.id)}
 							<button
 								class="card"
 								class:selected={selectedCards.some((c) => c.id === card.id)}
@@ -218,7 +218,7 @@
 				</div>
 			</div>
 			<div class="selected-cards-list">
-				{#each selectedCards as card}
+				{#each selectedCards as card (card.id)}
 					<div class="selected-card-item">
 						<div class="flex flex-col">
 							<span class="name">{card.nameTh.split(' (')[0]}</span>

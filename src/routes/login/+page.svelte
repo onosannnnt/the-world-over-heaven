@@ -1,10 +1,6 @@
 <script>
 	let { form } = $props();
 	let mode = $state('signIn'); // 'signIn' or 'signUp'
-
-	function toggleMode() {
-		mode = mode === 'signIn' ? 'signUp' : 'signIn';
-	}
 </script>
 
 <div class="auth-page flex min-h-screen items-center justify-center p-6">
