@@ -47,7 +47,7 @@
 				href="/tarot"
 				class="text-slate-500 no-underline transition-colors hover:text-indigo-500 dark:text-slate-400 dark:hover:text-white"
 			>
-				เริ่มทำนาย
+				เริ่มแปลไพ่
 			</a>
 			<a
 				href="/tarot/history"

@@ -26,7 +26,7 @@
 		{#if history.length === 0}
 			<div class="empty-state">
 				<p>ยังไม่มีประวัติการทำนาย</p>
-				<a href="/tarot" class="btn-start">เริ่มทำนายเลย</a>
+				<a href="/tarot" class="btn-start">เริ่มแปลไพ่งเลย</a>
 			</div>
 		{:else}
 			{#each history as item (item.id)}

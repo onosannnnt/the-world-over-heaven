@@ -41,7 +41,7 @@
 					href="/tarot"
 					class="flex items-center justify-center gap-2 rounded-full bg-indigo-600 px-8 py-4 font-bold text-white shadow-xl shadow-indigo-500/25 transition-all hover:scale-105 hover:bg-indigo-500"
 				>
-					เริ่มทำนายดวงของคุณ
+					เริ่มแปลไพ่ดวงของคุณ
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
 						class="h-5 w-5"
