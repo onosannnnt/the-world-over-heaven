@@ -198,10 +198,10 @@
 									</div>
 									<div>
 										<p class="text-sm font-bold text-slate-700 dark:text-slate-200">
-											โหมดจดจำบริบทเดิม
+											ทำนายต่อเนื่องจากครั้งก่อน
 										</p>
 										<p class="text-xs text-slate-500 dark:text-slate-400">
-											ใช้ประวัติการทำนายล่าสุดช่วยวิเคราะห์
+											ให้แม่หมอ AI เชื่อมโยงคำทำนายปัจจุบันกับประวัติล่าสุดของคุณ
 										</p>
 									</div>
 								</div>
