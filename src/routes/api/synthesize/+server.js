@@ -3,10 +3,11 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import { env } from '$env/dynamic/private';
 import { db } from '$lib/server/db';
 import { readingHistory } from '$lib/server/db/schema';
+import { eq, desc } from 'drizzle-orm';
 
 export async function POST({ request, locals }) {
 	try {
-		if (!locals.session) {
+		if (!locals.session || !locals.user) {
 			return json({ error: 'Unauthorized. Please log in to use AI Insight.' }, { status: 401 });
 		}
 
@@ -14,10 +15,28 @@ export async function POST({ request, locals }) {
 			return json({ error: 'GEMINI_API_KEY is not set.' }, { status: 500 });
 		}
 
-		const { cards, question } = await request.json();
+		const { cards, question, useHistory } = await request.json();
 
 		if (!cards || !Array.isArray(cards) || cards.length === 0) {
 			return json({ error: 'No cards provided.' }, { status: 400 });
+		}
+
+		// Fetch history if requested
+		let historyContext = '';
+		if (useHistory) {
+			const pastReadings = await db
+				.select()
+				.from(readingHistory)
+				.where(eq(readingHistory.userId, locals.user.id))
+				.orderBy(desc(readingHistory.timestamp))
+				.limit(3);
+
+			if (pastReadings.length > 0) {
+				historyContext = pastReadings
+					.reverse()
+					.map((h) => `ผู้ใช้ถาม: ${h.question}\nคำทำนายของคุณ: ${h.aiSummary}`)
+					.join('\n---\n');
+			}
 		}
 
 		const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
@@ -29,13 +48,14 @@ export async function POST({ request, locals }) {
 
 		const prompt = `
 คุณคือ Tarot Reader ที่พูดตรงประเด็น เน้นเนื้อๆ ไม่เอาน้ำ
-ไพ่ที่เปิดได้:
+${historyContext ? `\nบริบทจากการทำนายก่อนหน้า:\n${historyContext}\n---\n` : ''}
+ไพ่ที่เปิดได้ปัจจุบัน:
 ${promptCards}
-${question ? `คำถาม: "${question}"` : 'วิเคราะห์ภาพรวม'}
+${question ? `คำถามปัจจุบัน: "${question}"` : 'วิเคราะห์ภาพรวม'}
 
 กติกาการตอบ:
-1. วิเคราะห์ทีละใบ: บอกสั้นๆ ว่าไพ่ใบนี้ตอบคำถาม (หรือส่งผลต่อดวง) อย่างไร (1-2 ประโยคต่อใบ)
-2. บทสรุป: สรุปคำตอบสุดท้ายสั้นๆ ชัดเจน
+1. วิเคราะห์ทีละใบ: บอกสั้นๆ ว่าไพ่ใบนี้ตอบคำถามอย่างไร (1-2 ประโยคต่อใบ)
+2. บทสรุป: สรุปคำตอบสุดท้ายสั้นๆ ชัดเจน โดยพิจารณาจากบริบทเดิม (ถ้ามี) เพื่อให้คำแนะนำต่อเนื่องกัน
 
 ใช้ภาษาไทยที่เป็นกันเองแต่สุภาพ ไม่ต้องมีคำเกริ่นนำหรือคำส่งท้ายที่เยิ่นเย้อ
 `;

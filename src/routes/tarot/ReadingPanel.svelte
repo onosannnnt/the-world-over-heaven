@@ -5,6 +5,7 @@
 
 	// AI State
 	let userQuestion = $state('');
+	let useHistory = $state(false);
 	let aiSummary = $state('');
 	let isGenerating = $state(false);
 	let aiError = $state('');
@@ -66,7 +67,8 @@
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({
 					cards: selectedCards,
-					question: userQuestion
+					question: userQuestion,
+					useHistory: useHistory
 				})
 			});
 
@@ -172,6 +174,52 @@
 								bind:value={userQuestion}
 								placeholder="เช่น ความรักในช่วงนี้จะเป็นอย่างไร?, งานใหม่ที่สมัครไว้จะได้ไหม?..."
 							></textarea>
+
+							<div
+								class="mb-6 flex items-center justify-between rounded-xl border border-indigo-100 bg-indigo-50/50 p-3 dark:border-indigo-900/30 dark:bg-indigo-950/20"
+							>
+								<div class="flex items-center gap-2">
+									<div
+										class="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-900/50 dark:text-indigo-400"
+									>
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											class="h-5 w-5"
+											viewBox="0 0 20 20"
+											fill="currentColor"
+										>
+											<path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
+											<path
+												fill-rule="evenodd"
+												d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z"
+												clip-rule="evenodd"
+											/>
+										</svg>
+									</div>
+									<div>
+										<p class="text-sm font-bold text-slate-700 dark:text-slate-200">
+											โหมดจดจำบริบทเดิม
+										</p>
+										<p class="text-xs text-slate-500 dark:text-slate-400">
+											ใช้ประวัติการทำนายล่าสุดช่วยวิเคราะห์
+										</p>
+									</div>
+								</div>
+								<button
+									class="relative h-6 w-11 rounded-full transition-colors {useHistory
+										? 'bg-indigo-600'
+										: 'bg-slate-300 dark:bg-slate-700'}"
+									onclick={() => (useHistory = !useHistory)}
+									aria-label="เปิดโหมดจำบริบท"
+								>
+									<div
+										class="absolute top-1 left-1 h-4 w-4 rounded-full bg-white transition-transform {useHistory
+											? 'translate-x-5'
+											: ''}"
+									></div>
+								</button>
+							</div>
+
 							<button class="btn-generate" onclick={generateAISummary} disabled={isGenerating}>
 								{isGenerating
 									? 'กำลังประมวลผล...'
