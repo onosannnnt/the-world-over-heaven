@@ -3,7 +3,7 @@
 	import ReadingPanel from './ReadingPanel.svelte';
 
 	let { data } = $props();
-	const cards = data.cards;
+	const cards = $derived(data.cards);
 
 	let showReadingPanel = $state(false);
 
@@ -13,6 +13,7 @@
 	let filterSuit = $state('all'); // 'all', 'cups', 'wands', 'swords', 'pentacles'
 	let showImages = $state(true);
 
+	/** @type {any[]} */
 	let selectedCards = $state([]);
 
 	// Derived state for filtering
@@ -22,7 +23,8 @@
 				searchQuery === '' ||
 				card.nameTh.toLowerCase().includes(searchQuery.toLowerCase()) ||
 				card.nameEn.toLowerCase().includes(searchQuery.toLowerCase()) ||
-				card.keywords.some((k) => k.toLowerCase().includes(searchQuery.toLowerCase()));
+				(Array.isArray(card.keywords) &&
+					card.keywords.some((k) => k.toLowerCase().includes(searchQuery.toLowerCase())));
 
 			const matchesArcana = filterArcana === 'all' || card.arcana === filterArcana;
 			const matchesSuit = filterSuit === 'all' || card.suit === filterSuit;
@@ -32,6 +34,7 @@
 	);
 
 	// Grouping and sorting logic
+	/** @type {Record<string, number>} */
 	const suitOrder = { wands: 1, cups: 2, swords: 3, pentacles: 4 };
 	let groupedCards = $derived({
 		major: filteredCards
@@ -44,14 +47,15 @@
 			.filter((c) => c.arcana === 'minor')
 			.sort((a, b) => {
 				// Sort by Suit first
-				const suitA = suitOrder[a.suit] || 99;
-				const suitB = suitOrder[b.suit] || 99;
+				const suitA = suitOrder[a.suit || ''] || 99;
+				const suitB = suitOrder[b.suit || ''] || 99;
 				if (suitA !== suitB) return suitA - suitB;
 				// Then by Value
 				return a.value - b.value;
 			})
 	});
 
+	/** @param {any} card */
 	function toggleSelection(card) {
 		const index = selectedCards.findIndex((c) => c.id === card.id);
 		if (index !== -1) {
@@ -61,12 +65,14 @@
 		}
 	}
 
+	/** @param {string} cardId */
 	function toggleReversed(cardId) {
 		selectedCards = selectedCards.map((c) =>
 			c.id === cardId ? { ...c, isReversed: !c.isReversed } : c
 		);
 	}
 
+	/** @param {string} cardId */
 	function removeCard(cardId) {
 		selectedCards = selectedCards.filter((c) => c.id !== cardId);
 	}
@@ -224,13 +230,14 @@
 							<span class="name">{card.nameTh.split(' (')[0]}</span>
 							<span class="text-xs text-slate-400">{card.nameEn}</span>
 						</div>
-						<div class="flex items-center gap-3" title="ไพ่กลับหัว">
+						<div class="flex items-center gap-3">
 							<span class="text-xs text-slate-400">↕</span>
 							<button
 								class="relative h-5 w-10 rounded-full transition-colors {card.isReversed
 									? 'bg-indigo-600'
 									: 'bg-slate-300 dark:bg-slate-700'}"
 								onclick={() => toggleReversed(card.id)}
+								aria-label="สลับไพ่กลับหัว"
 							>
 								<div
 									class="absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform {card.isReversed
@@ -539,15 +546,6 @@
 	.name {
 		font-weight: 600;
 		font-size: 0.9rem;
-	}
-
-	.reversed-toggle {
-		display: flex;
-		align-items: center;
-		gap: 0.4rem;
-		cursor: pointer;
-		font-size: 0.8rem;
-		color: #64748b;
 	}
 
 	.btn-remove {

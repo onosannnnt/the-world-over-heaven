@@ -9,7 +9,22 @@
 	let isGenerating = $state(false);
 	let aiError = $state('');
 
-	// Helper to get the correct meaning based on reversed state
+	/** @typedef {Object} Card
+	 * @property {boolean} isReversed
+	 * @property {string} meaningGeneral
+	 * @property {string} meaningLove
+	 * @property {string} meaningCareer
+	 * @property {string} meaningFinance
+	 * @property {string} revGeneral
+	 * @property {string} revLove
+	 * @property {string} revCareer
+	 * @property {string} revFinance
+	 */
+
+	/**
+	 * @param {any} card
+	 * @param {'general' | 'love' | 'career' | 'finance'} type
+	 */
 	function getMeaning(card, type) {
 		if (card.isReversed) {
 			switch (type) {
@@ -63,17 +78,23 @@
 
 			aiSummary = data.summary;
 		} catch (error) {
-			aiError = error.message;
+			aiError = error instanceof Error ? error.message : String(error);
 		} finally {
 			isGenerating = false;
 		}
 	}
 </script>
 
-<div class="modal-backdrop" onclick={onClose}>
+<div
+	class="modal-backdrop"
+	onclick={onClose}
+	onkeydown={(e) => e.key === 'Escape' && onClose()}
+	role="button"
+	tabindex="-1"
+>
 	<!-- svelte-ignore a11y_click_events_have_key_events -->
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
-	<div class="modal-content" onclick={(e) => e.stopPropagation()}>
+	<div class="modal-content" onclick={(e) => e.stopPropagation()} role="document">
 		<header class="modal-header">
 			<h2>คำทำนายไพ่ยิปซี</h2>
 			<button class="btn-close" onclick={onClose}>✕</button>

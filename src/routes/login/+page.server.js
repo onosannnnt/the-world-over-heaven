@@ -52,7 +52,8 @@ export const actions = {
 			});
 			throw redirect(303, '/');
 		} catch (error) {
-			if (error.status === 303) throw error;
+			if (error && typeof error === 'object' && 'status' in error && error.status === 303)
+				throw error;
 			console.error('Sign in error:', error);
 			return fail(401, { message: 'อีเมลหรือรหัสผ่านไม่ถูกต้อง' });
 		}
@@ -65,7 +66,8 @@ export const actions = {
 			});
 			throw redirect(303, '/login');
 		} catch (error) {
-			if (error.status === 303) throw error;
+			if (error && typeof error === 'object' && 'status' in error && error.status === 303)
+				throw error;
 			return fail(500, { message: 'เกิดข้อผิดพลาดในการออกจากระบบ' });
 		}
 	}

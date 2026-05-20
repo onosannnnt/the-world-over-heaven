@@ -1,7 +1,8 @@
 <script>
 	let { data } = $props();
-	const history = data.history;
+	const history = $derived(data.history);
 
+	/** @param {string} isoString */
 	function formatDate(isoString) {
 		const date = new Date(isoString);
 		return date.toLocaleString('th-TH', {
@@ -28,12 +29,13 @@
 			</div>
 		{:else}
 			{#each history as item (item.id)}
+				{@const cards = /** @type {any[]} */ (item.cards)}
 				<div class="history-item">
 					<div class="item-header">
 						<span class="date">{formatDate(item.timestamp)}</span>
 					</div>
 					<div class="item-cards">
-						{#each item.cards as card (card.id)}
+						{#each cards as card (card.id)}
 							<div class="card-thumb">
 								<img src={card.imageUrl} alt={card.nameTh} class:reversed={card.isReversed} />
 								<span class="card-name dark:text-slate-400">{card.nameTh}</span>
