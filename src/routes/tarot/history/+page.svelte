@@ -1,5 +1,6 @@
 <script>
 	let { data } = $props();
+	/** @type {any[]} */
 	const history = $derived(data.history);
 
 	/** @param {string} isoString */
@@ -29,7 +30,7 @@
 			</div>
 		{:else}
 			{#each history as item (item.id)}
-				{@const cards = /** @type {any[]} */ (item.cards)}
+				{@const cards = item.cards}
 				<div class="history-item">
 					<div class="item-header">
 						<span class="date">{formatDate(item.timestamp)}</span>

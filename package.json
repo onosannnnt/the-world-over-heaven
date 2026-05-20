@@ -17,7 +17,9 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:studio": "drizzle-kit studio",
-		"auth:schema": "better-auth generate --config src/lib/server/auth.js --output src/lib/server/db/auth.schema.js --yes"
+		"auth:schema": "better-auth generate --config src/lib/server/auth.js --output src/lib/server/db/auth.schema.js --yes",
+		"test": "vitest run",
+		"test:watch": "vitest"
 	},
 	"dependencies": {
 		"@google/generative-ai": "^0.24.1",
@@ -46,6 +48,7 @@
 		"svelte-check": "^4.4.6",
 		"tailwindcss": "^4.2.2",
 		"typescript": "^6.0.2",
-		"vite": "^8.0.7"
+		"vite": "^8.0.7",
+		"vitest": "^4.1.7"
 	}
 }
