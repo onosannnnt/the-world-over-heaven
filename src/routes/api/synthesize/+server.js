@@ -40,7 +40,7 @@ export async function POST({ request, locals }) {
 		}
 
 		const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
-		const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+		const model = genAI.getGenerativeModel({ model: 'gemini-3.1-flash-lite' });
 
 		const promptCards = cards
 			.map((c) => `- ${c.nameTh} (${c.nameEn}) [${c.isReversed ? 'กลับหัว' : 'ตั้งตรง'}]`)
@@ -54,7 +54,7 @@ ${promptCards}
 ${question ? `คำถามปัจจุบัน: "${question}"` : 'วิเคราะห์ภาพรวม'}
 
 กติกาการตอบ:
-1. วิเคราะห์ทีละใบ: บอกสั้นๆ ว่าไพ่ใบนี้ตอบคำถามอย่างไร (1-2 ประโยคต่อใบ)
+1. วิเคราะห์ทีละใบ: บอกสั้นๆ ว่าไพ่ใบนี้ตอบคำถามอย่างไร (4-5 ประโยคต่อใบ)
 2. บทสรุป: สรุปคำตอบสุดท้ายสั้นๆ ชัดเจน โดยพิจารณาจากบริบทเดิม (ถ้ามี) เพื่อให้คำแนะนำต่อเนื่องกัน
 
 ใช้ภาษาไทยที่เป็นกันเองแต่สุภาพ ไม่ต้องมีคำเกริ่นนำหรือคำส่งท้ายที่เยิ่นเย้อ
